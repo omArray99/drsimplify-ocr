@@ -1,0 +1,114 @@
+/* General reset and base styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #0d1b2a; /* Dark blue background */
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    text-align: center;
+    color: #f0f0f0;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+header h1 { 
+    font-size: 36px;
+    color: #ffffff;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+header p {
+    font-size: 18px;
+    color: #dddddd;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+main {
+    padding: 20px;
+}
+
+#ocrContainer {
+    padding: 30px;
+    border-radius: 8px;
+    margin-bottom: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    font-size: 16px;
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #444;
+    background-color: #444;
+    color: #fff;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #f0f0f0;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.hidden {
+    display: none;
+}
+
+#ocrOutput {
+    margin-top: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#ocrOutput h2 {
+    color: #ccc;
+}

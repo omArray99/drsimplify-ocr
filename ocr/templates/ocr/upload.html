@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Form</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #fff;
+        background-image: url("static/ocr/img/bg3.jpeg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        /*    align-items: left;*/
+      }
+
+      .container {
+        /*    background: rgba(35, 37, 38, 0.8); */
+        max-width: 800px;
+        max-height: 480px;
+        margin-top: 80px;
+        padding: 50px;
+        background: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      header h1 {
+        color: #f0f0f0;
+        font-size: 40px;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      header p {
+        font-size: 18px;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 1);
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      #ocrContainer {
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 50px;
+      }
+
+      form {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      input[type="file"],
+      input[type="text"],
+      button {
+        font-size: 16px;
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #444;
+        background-color: #333333;
+        color: #fff;
+        border-radius: 5px;
+        margin-top: 120px;
+      }
+
+      button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 20px;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 75px;
+        color: #f0f0f0;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #ocrOutput h2 {
+        color: #ccc;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <h1>OCR Prescription Analysis</h1>
+        <p>Upload a prescription image to analyze.</p>
+      </header>
+
+      <main>
+        <div id="ocrContainer">
+          <div id="ocrOutput" class="hidden">
+            <h2>Analysis Results</h2>
+            <p id="ocrText"></p>
+          </div>
+
+          <form id="uploadForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="image" id="imageInput" required />
+            <button type="submit">Upload</button>
+          </form>
+        </div>
+      </main>
+      <footer>
+        <p>&copy; 2024 Medical Insights. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const uploadForm = document.getElementById("uploadForm");
+        const csrfToken = document.querySelector(
+          "[name=csrfmiddlewaretoken]"
+        ).value;
+
+        uploadForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const formData = new FormData(uploadForm);
+          const ocrOutput = document.getElementById("ocrOutput");
+          const ocrText = document.getElementById("ocrText");
+
+          fetch("/upload_image/", {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": csrfToken,
+            },
+            body: formData,
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(
+                  "Network response was not ok: " + response.statusText
+                );
+              }
+              return response.json();
+            })
+            .then((data) => {
+              if (data.result) {
+                ocrText.textContent = data.result;
+                ocrOutput.classList.remove("hidden");
+              } else if (data.error) {
+                ocrText.textContent = "Error: " + data.error;
+                ocrOutput.classList.remove("hidden");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              ocrText.textContent =
+                "Failed to process the image: " + error.message;
+              ocrOutput.classList.remove("hidden");
+            });
+        });
+
+        document
+          .getElementById("downloadPdf")
+          .addEventListener("click", function () {
+            window.location.href = "/download-pdf";
+          });
+      });
+    </script>
+  </body>
+</html>
